@@ -1,0 +1,17 @@
+{
+  "name": "shelfsignal",
+  "version": "1.0.0",
+  "description": "Small stock visibility app with reorder signals, supplier notes, and CSV export.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrerafaelf/shelfsignal.git"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

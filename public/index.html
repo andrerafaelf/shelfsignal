@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>ShelfSignal</title>
+		<link rel="stylesheet" href="/styles.css" />
+	</head>
+	<body>
+		<main class="shell">
+			<header class="hero">
+				<div>
+					<p class="eyebrow">ShelfSignal</p>
+					<h1>Simple stock visibility for small teams.</h1>
+				</div>
+				<a class="export" href="/api/export.csv">Export CSV</a>
+			</header>
+
+			<section class="grid">
+				<form id="item-form" class="panel">
+					<h2>Add item</h2>
+					<label>Name <input name="name" required placeholder="Coffee beans" /></label>
+					<label>Category <input name="category" required placeholder="Kitchen" /></label>
+					<div class="split">
+						<label>Quantity <input name="quantity" type="number" min="0" required /></label>
+						<label>Threshold <input name="threshold" type="number" min="0" required /></label>
+					</div>
+					<label>Unit <input name="unit" required placeholder="kg" /></label>
+					<label>Supplier <input name="supplier" required placeholder="Local supplier" /></label>
+					<label>Location <input name="location" required placeholder="Shelf A" /></label>
+					<button>Add item</button>
+					<p id="form-status" class="status"></p>
+				</form>
+
+				<section class="panel">
+					<h2>Inventory</h2>
+					<div id="items" class="items"></div>
+				</section>
+			</section>
+		</main>
+		<script src="/app.js" type="module"></script>
+	</body>
+</html>

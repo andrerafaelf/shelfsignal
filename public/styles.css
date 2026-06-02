@@ -1,0 +1,186 @@
+:root {
+	font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+	background: #f7f7f0;
+	color: #172018;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+}
+
+.shell {
+	width: min(1120px, calc(100% - 32px));
+	margin: 0 auto;
+	padding: 46px 0;
+}
+
+.hero {
+	display: flex;
+	justify-content: space-between;
+	align-items: end;
+	gap: 18px;
+	margin-bottom: 24px;
+}
+
+.eyebrow {
+	margin: 0 0 12px;
+	font-size: 12px;
+	font-weight: 900;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: #527a34;
+}
+
+h1 {
+	max-width: 760px;
+	margin: 0;
+	font-size: clamp(38px, 7vw, 78px);
+	line-height: 0.96;
+	letter-spacing: -0.03em;
+}
+
+h2 {
+	margin: 0 0 18px;
+}
+
+.export,
+button {
+	border: 0;
+	background: #527a34;
+	color: white;
+	padding: 11px 14px;
+	font-weight: 900;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: 0.78fr 1.22fr;
+	gap: 18px;
+	align-items: start;
+}
+
+.panel,
+.item {
+	background: #fffef8;
+	border: 1px solid #d6d9c7;
+	box-shadow: 0 18px 50px rgb(23 32 24 / 0.08);
+}
+
+.panel {
+	padding: 22px;
+}
+
+label {
+	display: grid;
+	gap: 7px;
+	margin-bottom: 12px;
+	font-size: 13px;
+	font-weight: 800;
+	color: #65705f;
+}
+
+input {
+	width: 100%;
+	border: 1px solid #c8ceb8;
+	background: #fbfbf4;
+	padding: 11px 12px;
+	font: inherit;
+}
+
+.split,
+.adjust {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+}
+
+.status {
+	min-height: 20px;
+	color: #527a34;
+	font-size: 13px;
+}
+
+.items {
+	display: grid;
+	gap: 12px;
+}
+
+.item {
+	padding: 16px;
+}
+
+.item.reorder {
+	border-color: #b45309;
+	background: #fff7ed;
+}
+
+.item-head {
+	display: flex;
+	justify-content: space-between;
+	gap: 16px;
+	align-items: start;
+}
+
+.item-head div {
+	display: grid;
+	gap: 5px;
+}
+
+.item span,
+.item p,
+.item small {
+	color: #64705f;
+}
+
+.item b {
+	text-transform: uppercase;
+	color: #527a34;
+	font-size: 12px;
+	letter-spacing: 0.1em;
+}
+
+.item.reorder b {
+	color: #b45309;
+}
+
+.meter {
+	height: 10px;
+	background: #e9eadf;
+	margin: 14px 0;
+	overflow: hidden;
+}
+
+.meter span {
+	display: block;
+	height: 100%;
+	background: #527a34;
+}
+
+.item.reorder .meter span {
+	background: #b45309;
+}
+
+.adjust {
+	grid-template-columns: 120px 1fr auto;
+	margin-top: 14px;
+}
+
+@media (max-width: 820px) {
+	.hero,
+	.item-head {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+
+	.grid,
+	.split,
+	.adjust {
+		grid-template-columns: 1fr;
+	}
+}

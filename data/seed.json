@@ -1,0 +1,11 @@
+{
+  "items": [
+    { "id": "item_1001", "name": "Coffee beans", "category": "Kitchen", "quantity": 8, "threshold": 10, "unit": "kg", "supplier": "Lisbon Roasters", "location": "Shelf A" },
+    { "id": "item_1002", "name": "Thermal labels", "category": "Packing", "quantity": 42, "threshold": 20, "unit": "rolls", "supplier": "PrintPro", "location": "Shelf C" },
+    { "id": "item_1003", "name": "Nitrile gloves", "category": "Safety", "quantity": 6, "threshold": 12, "unit": "boxes", "supplier": "Medline", "location": "Cabinet 2" }
+  ],
+  "movements": [
+    { "id": "move_2001", "itemId": "item_1001", "delta": -2, "note": "Weekend usage", "createdAt": "2026-05-31T09:30:00.000Z" },
+    { "id": "move_2002", "itemId": "item_1002", "delta": 10, "note": "Supplier delivery", "createdAt": "2026-05-29T14:00:00.000Z" }
+  ]
+}
