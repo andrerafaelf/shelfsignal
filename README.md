@@ -12,6 +12,13 @@ It keeps the workflow simple: add items, set reorder thresholds, adjust stock, a
 - Keep a small usage/delivery history
 - Export inventory as CSV
 
+## Demo
+
+A static demo is available at https://andrerafaelf.github.io/shelfsignal/.
+
+On GitHub Pages, changes are stored in your browser. Running locally with 
+pm start uses the Node API and JSON store.
+
 ## Running it
 
 ```bash

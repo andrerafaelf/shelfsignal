@@ -1,6 +1,69 @@
 const $ = (selector) => document.querySelector(selector);
+const isStaticDemo = location.hostname.endsWith('github.io');
+const storageKey = 'shelfsignal-demo-store';
+const seed = {
+	items: [
+		{ id: 'item_1001', name: 'Coffee beans', category: 'Kitchen', quantity: 8, threshold: 10, unit: 'kg', supplier: 'Lisbon Roasters', location: 'Shelf A' },
+		{ id: 'item_1002', name: 'Thermal labels', category: 'Packing', quantity: 42, threshold: 20, unit: 'rolls', supplier: 'PrintPro', location: 'Shelf C' },
+		{ id: 'item_1003', name: 'Nitrile gloves', category: 'Safety', quantity: 6, threshold: 12, unit: 'boxes', supplier: 'Medline', location: 'Cabinet 2' }
+	],
+	movements: [
+		{ id: 'move_2001', itemId: 'item_1001', delta: -2, note: 'Weekend usage', createdAt: '2026-05-31T09:30:00.000Z' },
+		{ id: 'move_2002', itemId: 'item_1002', delta: 10, note: 'Supplier delivery', createdAt: '2026-05-29T14:00:00.000Z' }
+	]
+};
+
+function getStore() {
+	const saved = localStorage.getItem(storageKey);
+	return saved ? JSON.parse(saved) : structuredClone(seed);
+}
+
+function saveStore(store) {
+	localStorage.setItem(storageKey, JSON.stringify(store));
+}
+
+function withSignals(store) {
+	return store.items
+		.map((item) => ({
+			...item,
+			status: item.quantity <= item.threshold ? 'reorder' : 'healthy',
+			lastMovement: store.movements.find((movement) => movement.itemId === item.id) || null
+		}))
+		.sort((a, b) => Number(a.status === 'healthy') - Number(b.status === 'healthy'));
+}
+
+function toCsv(items) {
+	const header = ['name', 'category', 'quantity', 'threshold', 'unit', 'supplier', 'location', 'status'];
+	const rows = items.map((item) => header.map((key) => `"${String(item[key]).replaceAll('"', '""')}"`).join(','));
+	return [header.join(','), ...rows].join('\n');
+}
+
+async function demoApi(path, options = {}) {
+	const store = getStore();
+	const body = options.body ? JSON.parse(options.body) : {};
+	if (path === '/api/items') return withSignals(store);
+	if (path === '/api/items' && options.method === 'POST') {
+		const item = { id: `item_${Date.now()}`, ...body, quantity: Number(body.quantity), threshold: Number(body.threshold) };
+		store.items.unshift(item);
+		saveStore(store);
+		return item;
+	}
+	if (path.endsWith('/adjust') && options.method === 'PATCH') {
+		const id = path.split('/').at(-2);
+		const item = store.items.find((entry) => entry.id === id);
+		if (!item) throw new Error('Item not found');
+		const delta = Number(body.delta);
+		if (item.quantity + delta < 0) throw new Error('Adjustment would make stock negative');
+		item.quantity += delta;
+		store.movements.unshift({ id: `move_${Date.now()}`, itemId: id, delta, note: body.note || 'Manual adjustment', createdAt: new Date().toISOString() });
+		saveStore(store);
+		return item;
+	}
+	throw new Error('Route not available in demo mode');
+}
 
 async function api(path, options = {}) {
+	if (isStaticDemo) return demoApi(path, options);
 	const response = await fetch(path, { headers: { 'content-type': 'application/json' }, ...options });
 	const data = await response.json();
 	if (!response.ok) throw new Error(data.error || 'Request failed');
@@ -58,11 +121,27 @@ $('#items').addEventListener('submit', async (event) => {
 	if (!form) return;
 	event.preventDefault();
 	const payload = Object.fromEntries(new FormData(form));
-	await api(`/api/items/${form.dataset.adjust}/adjust`, {
-		method: 'PATCH',
-		body: JSON.stringify(payload)
-	});
-	await load();
+	try {
+		await api(`/api/items/${form.dataset.adjust}/adjust`, {
+			method: 'PATCH',
+			body: JSON.stringify(payload)
+		});
+		await load();
+	} catch (error) {
+		$('#form-status').textContent = error.message;
+	}
+});
+
+$('#export-link').addEventListener('click', async (event) => {
+	if (!isStaticDemo) return;
+	event.preventDefault();
+	const csv = toCsv(await api('/api/items'));
+	const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+	const link = document.createElement('a');
+	link.href = url;
+	link.download = 'shelfsignal-export.csv';
+	link.click();
+	URL.revokeObjectURL(url);
 });
 
 load();
